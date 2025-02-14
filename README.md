@@ -48,7 +48,28 @@ bytes=0-999999
 - 支援續傳：請求中斷後，可以從中斷點繼續請求，而不是重新開始播放，因為 Server 認 Header Range bytes 範圍，只要 Client 還記得 bytes 範圍，Server 就能繼續回傳對應內容。
 - 改善使用者體驗：影片可以即時開始播放，而不是等待整部影片載入。
  
-## HTTP 206 vs. HTTP 200 vs. HTTP 416
+## HTTP 200 vs. HTTP 206 vs. HTTP 416
+
+### HTTP 200
+
+當 Client 發送請求，但沒有 Range Header，Server 會回傳完整的資源。
+
+- 影片資源會完整下載，而不是逐步加載，這導致大量流量消耗：如果影片太大餅且使用者網路太差，會有很糟糕的體驗。
+- 跳轉無效，因為 Client 瀏覽器無法針對某個影片片段單獨請求。
+
+### HTTP 206
+
+當 Client 發送 Range Header 請求檔案的部分內容時，Server 會回應 206 Partial Content，並只回傳請求的區段。
+
+- 影片可以逐步下載，不會一次載入完整影片，減少流量，使用者的體驗也會比較好。
+- 支援跳轉時間片斷，瀏覽器可根據播放進度發送新的 Range Requests 來載入不同片段。
+
+### HTTP 406
+
+當 Client 請求的 Range 超出了檔案大小範圍，Server 無法回應該區段就會回傳 416。
+
+- 影片播放失敗，因為瀏覽器請求了一個不存在的區段。
+- 某些播放器可能會自動重新請求正確範圍，但如果 Server 處理不當，可能導致播放錯誤。
 
 ## HTTP range requests vs HLS
 
