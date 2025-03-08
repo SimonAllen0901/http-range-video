@@ -98,7 +98,7 @@ HTTP Range Requests 和 HLS 都能片段式、逐個 request 請求播放影片�
 * HTTP Range Requests 對 Server 負擔較高，由於 Range 動態影音片段不容易被 CDN Cache，Server 會需要頻繁 IO 讀取並計算、回傳不同影片區段。
 * HLS 對 Server 負擔相對低，因為只傳固定時間範圍的 `.ts` 片段，CDN 可以 Cache。
 
-### 跳轉(使用者在播放器時間軸跳轉特定時間為置)
+### 跳轉（使用者在播放器時間軸跳轉特定時間位置）
 
 * HTTP Range Requests 可以，根續使用者請求的 `Range: bytes=...` 來取得跳轉新時間為置的影音片段。
 * HLS 可以，根據跳轉的時間位置，透過 `m3u8` 內紀錄的 ts 去取得對應的 `.ts` 片段。
